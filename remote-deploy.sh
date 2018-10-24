@@ -35,6 +35,9 @@ systemctl enable docker;
 #if the system was unable to start docker, restart
 # ! systemctl is-active --quiet docker && exit 1;
 docker-compose down
-docker-compose up -d
+docker-compose up -d rocketchat
+docker-compose up -d mongo
+docker-compose up -d mongo-init-replica
+docker-compose up -d nginx
 ufw --force enable
 exit;

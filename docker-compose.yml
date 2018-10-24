@@ -5,15 +5,13 @@ services:
     image: rocketchat/rocket.chat:latest
     restart: unless-stopped
     volumes:
-      - ./uploads:/app/uploads
+      - /mnt/volume_sfo2_01/uploads:/app/uploads
     environment:
       - PORT=3000
       - ROOT_URL=https://chat.altamir.io
       - MONGO_URL=mongodb://mongo:27017/rocketchat
       - MONGO_OPLOG_URL=mongodb://mongo:27017/local
       - MAIL_URL=smtp://smtp-relay.gmail.com
-#       - HTTP_PROXY=http://proxy.domain.com
-#       - HTTPS_PROXY=http://proxy.domain.com
     depends_on:
       - mongo
     expose:
@@ -25,8 +23,7 @@ services:
     image: mongo:3.2
     restart: unless-stopped
     volumes:
-     - ./data/db:/data/db
-     #- ./data/dump:/dump
+     - /mnt/volume_sfo2_01/data/db:/data/db
     command: mongod --smallfiles --oplogSize 128 --replSet rs0 --storageEngine=mmapv1
     labels:
       - "traefik.enable=false"
