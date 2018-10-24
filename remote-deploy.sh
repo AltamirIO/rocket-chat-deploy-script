@@ -11,8 +11,7 @@ function testInstalled {
     return 0;
 }
 
-echo $(testInstalled docker)
-
+echo "LOCATION $1"
 cd $1
 
 # test that docker-compose and docker are installed
@@ -20,19 +19,22 @@ cd $1
 ! testInstalled docker-compose && apt update; apt install -y docker-compose;
 ! testInstalled docker && apt update; apt install -y docker;
 
+#configure firewall
+ufw default deny incoming
+ufw default allow outgoing
+ufw allow 22/tcp
+ufw allow 443/tcp
+
+cp ./hosts /etc/hosts
+
+crontab -l | { cat; echo "@daily certbot renew --pre-hook \"docker-compose -f /opt/docker-compose.yml down\" --post-hook \"docker-compose -f /opt/docker-compose.yml up -d\""; } | crontab -
+certbot -n -d chat.altamir.io;
 systemctl start docker;
 systemctl enable docker;
 
 #if the system was unable to start docker, restart
-! systemctl is-active --quiet docker && exit 1;
-
-#start mongodb
-docker-compose up -d mongo
-
-#start mongodb replicator
-docker-compose up -d mongo-init-replica
-
-#stop the current rocketchat instance, delete it, and bring up the new image
-docker-compose stop rocketchat
-docker-compose rm -f rocketchat
-docker-compose up -d rocketchat
+# ! systemctl is-active --quiet docker && exit 1;
+docker-compose down
+docker-compose up -d
+ufw --force enable
+exit;
