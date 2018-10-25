@@ -19,6 +19,8 @@ cd $1
 ! testInstalled docker-compose && apt update; apt install -y docker-compose;
 ! testInstalled docker && apt update; apt install -y docker;
 
+source ./.env
+
 #configure firewall
 ufw default deny incoming
 ufw default allow outgoing

@@ -5,10 +5,10 @@ services:
     image: rocketchat/rocket.chat:latest
     restart: unless-stopped
     volumes:
-      - /mnt/volume_sfo2_01/uploads:/app/uploads
+      - ${STORAGE_PATH}:/app/uploads
     environment:
       - PORT=3000
-      - ROOT_URL=https://chat.altamir.io
+      - ROOT_URL=${DOMAIN_ADDR}
       - MONGO_URL=mongodb://mongo:27017/rocketchat
       - MONGO_OPLOG_URL=mongodb://mongo:27017/local
       - MAIL_URL=smtp://smtp-relay.gmail.com
@@ -18,7 +18,7 @@ services:
       - "3000"
     labels:
       - "traefik.backend=rocketchat"
-      - "traefik.frontend.rule=Host: https://chat.altamir.io"
+      - "traefik.frontend.rule=Host: ${DOMAIN_ADDR}"
     ports:
       - "2222:22"
   mongo:
