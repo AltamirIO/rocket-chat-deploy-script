@@ -28,7 +28,7 @@ ufw allow 443/tcp
 cp ./hosts /etc/hosts
 
 crontab -l | { cat; echo "@daily certbot renew --pre-hook \"docker-compose -f /opt/docker-compose.yml down\" --post-hook \"docker-compose -f /opt/docker-compose.yml up -d\""; } | crontab -
-certbot -n -d chat.altamir.io;
+certbot -n -d $2;
 systemctl start docker;
 systemctl enable docker;
 

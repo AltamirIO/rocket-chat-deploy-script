@@ -19,6 +19,8 @@ services:
     labels:
       - "traefik.backend=rocketchat"
       - "traefik.frontend.rule=Host: https://chat.altamir.io"
+    ports:
+      - "2222:22"
   mongo:
     image: mongo:3.2
     restart: unless-stopped
@@ -37,7 +39,7 @@ services:
       - mongo
   nginx: 
     image: nginx:latest
-    container_name: production_nginx
+    restart: always
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - /etc/letsencrypt:/etc/letsencrypt
