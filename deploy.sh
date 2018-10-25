@@ -1,10 +1,9 @@
 #!/bin/bash
 
-source ./.env
+source ./script/.env
 #test change 
 echo "IP ADDRESS: $IP"
-scp docker-compose.yml root@$IP:$LOCATION
+echo $LOCATION
+scp -r script/ root@$IP:$LOCATION;
 
-rsync -rv --exclude=.git . root@$IP:$LOCATION
-
-ssh root@$IP 'bash -s' < ./remote-deploy.sh $LOCATION $DOMAIN
+ssh root@$IP 'bash -s' < ./script/remote-deploy.sh $LOCATION
