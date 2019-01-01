@@ -11,7 +11,7 @@ services:
       - ROOT_URL=${DOMAIN_ADDR}
       - MONGO_URL=mongodb://mongo:27017/rocketchat
       - MONGO_OPLOG_URL=mongodb://mongo:27017/local
-      - MAIL_URL=smtp://smtp-relay.gmail.com
+      - MAIL_URL=smtp
     depends_on:
       - mongo
       - nginx
@@ -48,3 +48,14 @@ services:
     ports:
       - 80:80
       - 443:443
+  smtp:
+    image: namshi/smtp
+    restart: always
+    environment:
+      RELAY_DOMAINS: rocketchat
+      PORT: 25
+      MAILNAME: chat.altamir.io
+    expose:
+      - 25
+      - 465
+      - 587  
